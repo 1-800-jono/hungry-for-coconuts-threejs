@@ -13,7 +13,7 @@ function init() {
     scene.fog = new THREE.FogExp2(0xffffff, 0.002);
   }
 
-  var box = getBox(1,1,1);
+  //var box = getBox(1,1,1);
   //box.position.y = box.geometry.parameters.height/2;
 
   var planeMaterial = getMaterial('phong', 0xebdcb5);
@@ -52,6 +52,9 @@ function init() {
   //var boxGrid = getBoxGrid(20, 5, 8); //This looks like a bunch of structures piled together
   var boxGrid = getBoxGrid(20, 8, 2);
   boxGrid.name = 'boxGrid';
+
+  var manyTrees = bunchOfTrees(5);
+  scene.add(manyTrees);
 
   //var avatar = showAvatar();
 
@@ -260,6 +263,7 @@ function init() {
   var tree = makeTreeAt(5, 0, 2);
   scene.add(tree);
 
+
   update(renderer, scene, camera, controls, clock, walk, turn);
 
   return scene;
@@ -303,7 +307,7 @@ function makeTreeAt(x, z, scale) {
   // trunk.add(boundary);
   // notAllowed.push(boundary);
 
-  trunk.position.set(x, 3, z);
+  trunk.position.set(x, 5, z);
   //scene.add(trunk);
   return trunk;
   //return top;
@@ -317,6 +321,18 @@ function getBox(w, h, d) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = true;
   return mesh;
+}
+
+function bunchOfTrees(amount, separationMultiplier, scale) {
+  var group = new THREE.Group();
+
+  for (var i = 0; i < amount; i++) {
+    var obj = makeTreeAt(Math.random() * 90, Math.random() * 90, 2);
+
+    group.add(obj);
+  }
+
+  return group;
 }
 
 function getBoxGrid(amount, separationMultiplier, scale) {
