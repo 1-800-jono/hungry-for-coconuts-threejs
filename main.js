@@ -10,7 +10,7 @@ function init() {
 
   var enableFog = true;
   if(enableFog) {
-    scene.fog = new THREE.FogExp2(0xffffff, 0.005);
+    scene.fog = new THREE.FogExp2(0xffffff, 0.002);
   }
 
   var box = getBox(1,1,1);
@@ -74,8 +74,8 @@ function init() {
   );
 
   camera.position.x = 0;
-  camera.position.y = 40;
-  camera.position.z = 100;
+  camera.position.y = 60;
+  camera.position.z = 160;
   //camera.lookAt( new THREE.Vector3(0, 0, 0));
   //avatar.add(camera);
 
@@ -441,59 +441,6 @@ function getMaterial(type, color) {
   return selectedMaterial;
 }
 
-function showAvatar() {
-  var marker = new THREE.Object3D();
-  //scene.add(marker);
-
-  //Body
-  var body = new THREE.CylinderGeometry(3, 2, 4, 20);
-  var cover = new THREE.MeshNormalMaterial();
-  var avatar = new THREE.Mesh(body, cover);
-  avatar.name = 'body';
-  marker.add(avatar);
-
-  //Head
-  var shape = new THREE.SphereGeometry(2);
-  var head = new THREE.Mesh(shape, cover);
-  head.position.set(0, 4, 0);
-  //head.name('head');
-  avatar.add(head);
-
-  //Hat 
-  var shape = new THREE.CylinderGeometry(1, 3, 3, 20);
-  var hat = new THREE.Mesh(shape, cover);
-  hat.position.set(0, 6, 0);
-  hat.rotation.x = -0.2;
-  //hat.rotation.z = 0.4;
-  avatar.add(hat);
-
-  //Right Hand
-  var hand = new THREE.CylinderGeometry(1, 0.5, 3);
-  var rightHand = new THREE.Mesh(hand, cover);
-  rightHand.position.set(-4, 0, 0);
-  rightHand.name = 'rightHand';
-  avatar.add(rightHand);
-
-  //Left Hand
-  var leftHand = new THREE.Mesh(hand, cover);
-  leftHand.position.set(4, 0, 0);
-  leftHand.name = 'leftHand';
-  avatar.add(leftHand);
-
-  //Right Foot
-  var rightFoot = new THREE.Mesh(hand, cover);
-  rightFoot.position.set(-3, -4, 0);
-  rightFoot.name = 'rightFoot';
-  avatar.add(rightFoot);
-
-  //Left Foot
-  var leftFoot = new THREE.Mesh(hand, cover);
-  leftFoot.position.set(3, -4, 0);
-  leftFoot.name = 'leftFoot';
-  avatar.add(leftFoot);
-
-  return marker;
-}
 
 
 //UPDATE function
