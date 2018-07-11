@@ -41,11 +41,11 @@ function init() {
 
   //var helper = new THREE.CameraHelper(spotLight.shadow.camera);
 
-  gui.add(spotLight, 'intensity', 0, 10).name('Light Intensity');
-  gui.add(spotLight.position, 'x', 0, 100).name('Light Position x');
-  gui.add(spotLight.position, 'y', 0, 100).name('Light Position y');
-  gui.add(spotLight.position, 'z', -20, 20).name('Light Position z');
-  gui.add(spotLight.rotation, 'y', -20, 20).name('Light Position z');
+  // gui.add(spotLight, 'intensity', 0, 10).name('Light Intensity');
+  // gui.add(spotLight.position, 'x', 0, 100).name('Light Position x');
+  // gui.add(spotLight.position, 'y', 0, 100).name('Light Position y');
+  // gui.add(spotLight.position, 'z', -20, 20).name('Light Position z');
+  // gui.add(spotLight.rotation, 'y', -20, 20).name('Light Position z');
 
   var sphere = getSphere(0.05, 24, 24);
 
@@ -53,19 +53,13 @@ function init() {
   var boxGrid = getBoxGrid(20, 8, 2);
   boxGrid.name = 'boxGrid';
 
-  var manyTrees = bunchOfTrees(5);
+  var manyTrees = bunchOfTrees(15);
   scene.add(manyTrees);
-
-  //var avatar = showAvatar();
-
-  //avatar.position.set(0, 5, 0);
-
-  //scene.add(avatar);
 
   scene.add(plane);
   spotLight.add(sphere);
   scene.add(spotLight);
-  scene.add(boxGrid);
+  //scene.add(boxGrid);
   //scene.add(helper);
   //scene.add(ambientLight);
   //Camera
@@ -88,7 +82,8 @@ function init() {
   });
   renderer.shadowMap.enabled = true;//We need to enable shadow here as we as in the scene elements (plane and box).
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor('rgb(120, 120, 120)');
+  //renderer.setClearColor('rgb(120, 120, 120)');
+  renderer.setClearColor('rgb(193, 250, 255)');
   renderer.shadowMap.enabled = true;
   //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.getElementById('webgl').appendChild(renderer.domElement);
@@ -103,6 +98,7 @@ function init() {
   //Body
   var body = new THREE.CylinderGeometry(3, 2, 4, 20);
   var cover = new THREE.MeshNormalMaterial();
+  //cover.shading = THREE.FlatShading;
   var avatar = new THREE.Mesh(body, cover);
   avatar.name = 'body';
   marker.add(avatar);
@@ -272,10 +268,12 @@ function init() {
 //Functions
 var notAllowed = [];
 function makeTreeAt(x, z, scale) {
+  var group = new THREE.Group();
   var trunk = new THREE.Mesh(
     new THREE.CylinderGeometry(scale * 1, scale * 1, scale * 10),
     new THREE.MeshPhongMaterial({
-      color: 0xA0522D
+      color: 0xA0522D,
+      //shading: THREE.FlatShading
     })
   );
   var top = new THREE.Mesh(
@@ -296,6 +294,7 @@ function makeTreeAt(x, z, scale) {
 
   top.position.y = scale * 9;
   trunk.add(top);
+  group.add(trunk);
 
   //Boundaries
   // var boundary = new THREE.Mesh(
@@ -309,7 +308,7 @@ function makeTreeAt(x, z, scale) {
 
   trunk.position.set(x, 5, z);
   //scene.add(trunk);
-  return trunk;
+  return group;
   //return top;
 }
 
@@ -327,8 +326,13 @@ function bunchOfTrees(amount, separationMultiplier, scale) {
   var group = new THREE.Group();
 
   for (var i = 0; i < amount; i++) {
-    var obj = makeTreeAt(Math.random() * 90, Math.random() * 90, 2);
-
+    //var obj = makeTreeAt(noise.simplex2(i, i) * 120, Math.sin(Math.random()) * 90, 2);
+    var x = Math.floor(Math.random() * 200 - 100);
+    var z = Math.floor(Math.random() * 200 - 100);
+    var obj = makeTreeAt(x, z, 2);
+    //obj.geometry.translate(0, 0, 100);
+    var angle = Math.random() * 1;
+    //obj.rotation.set(angle, angle, angle);
     group.add(obj);
   }
 
@@ -434,6 +438,7 @@ function getMaterial(type, color) {
   var materialOptions = {
     color: color === undefined ? 'rgb(255, 255, 255)' : color,
     //wireframe: true,
+    //shading: THREE.FlatShading
   };
 
   switch (type) {
@@ -472,19 +477,19 @@ function update(renderer, scene, camera, controls, clock, walk, turn) {
   var plane = scene.getObjectByName('plane-1');
   var planeGeo = plane.geometry;
   planeGeo.vertices.forEach((vertex, index) => {
-    vertex.z = Math.random();
+    vertex.z = Math.random() * 2;
     //vertex.z += Math.sin(elapsedTime + index * 0.1 + Math.random()) * 0.005;
   });
   //planeGeo.verticesNeedUpdate = true;
 
 
-  var boxGrid = scene.getObjectByName('boxGrid');
-  boxGrid.children.forEach(function (child, index) {
-    var x = timeElapsed + index;
-   //child.scale.y = (Math.sin(timeElapsed * 5 + index) + 1) / 2 + 0.001;// Add 0.001 so it doens't go all the way to 0 and look glitchy
-    //child.scale.y = (noise.simplex2(x,x) + 1) / 2 + 0.001;
-    child.position.y = child.scale.y / 2;
-  });
+  // var boxGrid = scene.getObjectByName('boxGrid');
+  // boxGrid.children.forEach(function (child, index) {
+  //   var x = timeElapsed + index;
+  //  //child.scale.y = (Math.sin(timeElapsed * 5 + index) + 1) / 2 + 0.001;// Add 0.001 so it doens't go all the way to 0 and look glitchy
+  //   //child.scale.y = (noise.simplex2(x,x) + 1) / 2 + 0.001;
+  //   child.position.y = child.scale.y / 2;
+  // });
 
   renderer.render(scene, camera);
 
