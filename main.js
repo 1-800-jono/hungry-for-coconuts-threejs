@@ -498,5 +498,4 @@ function update(renderer, scene, camera, controls, clock, walk, turn) {
   });
 }
 
-
 var scene = init();
